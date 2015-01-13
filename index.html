@@ -9,6 +9,13 @@
     </head>
     <body>
         <div id="map" style="width: 800px; height: 675px"></div>
-        <script src="js/chiraq.js"></script> 
+        <script>
+            $(function() {
+                $.getJSON('data.json', function(data){
+                    console.log(JSON.stringify(data[0]));
+                    console.log("test");
+                });
+            });
+        </script> 
     </body>
 </html>
