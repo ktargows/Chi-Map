@@ -1,8 +1,8 @@
 $(function() {
-    jQuery('#map').vectorMap( {
+    $('#map').vectorMap( {
         map: 'us-il-chicago_mill_en',
-        borderWidth: 3,
-        enableZoom: false,
+        borderWidth: 1 ,
+        enableZoom: true,
         colors: '#f4d05e'
     } );
 });
