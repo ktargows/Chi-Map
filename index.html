@@ -1,17 +1,80 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>jVectorMap demo</title>
+        <title>Welcome to Chiraq</title>
         <link rel="stylesheet" href="css/jquery-jvectormap.css" type="text/css" media="screen"/>
         <script src="js/jquery.js"></script>
         <script src="js/jquery.jvectormap.min.js"></script>
         <script src="js/jquery-jvectormap-us-il-chicago-mill-en.js"></script>
     </head>
-    <body>
-        <div id="map" style="width: 800px; height: 675px"></div>
-        <script>
-            $(function() {
-            });
+    <body onload="loadJson();">
+        <div id="map" style="width: 800px; height: 675px; margin-left: auto; margin-right: auto;"></div>
+        <script type="text/javascript" charset="utf-8">
+            function loadJson()
+            {
+                $(function()
+                {
+                    $.getJSON('data/chiraq.json', function(data) {
+                        console.log(data);
+                        var asian_pop = [];
+                        var black_pop = [];
+                        var latino_pop = [];
+                        var multi_pop = [];
+                        var indig_pop = [];
+                        var other_pop = [];
+                        var white_pop = [];
+                        
+                        var coords = [];        // Array of coordinate pairs (pair stored as array) of homicides
+                        
+                        for (var i = 0; i < data.pop_stats.length; i++)
+                        {
+                            asian_pop.push(parseFloat(data.pop_stats[i].AS));
+                            black_pop.push(parseFloat(data.pop_stats[i].BLK));
+                            latino_pop.push(parseFloat(data.pop_stats[i].LAT));
+                            multi_pop.push(parseFloat(data.pop_stats[i].MUL));
+                            indig_pop.push(parseFloat(data.pop_stats[i].NA)); 
+                            other_pop.push(parseFloat(data.pop_stats[i].OTH));
+                            white_pop.push(parseFloat(data.pop_stats[i].WHT));
+                        }
+            
+                        for (var i = 0; i < data.homicides.length; i++)
+                        {
+                            var coord_pair = [];
+                            coord_pair.push(data.homicides[i].Latitude);
+                            coord_pair.push(data.homicides[i].Longitude);
+                            coords.push(coord_pair);
+                            
+                        }
+                        
+                        console.log(black_pop);
+                        console.log(asian_pop);
+                        console.log(latino_pop);
+                        console.log(other_pop);
+                        console.log(white_pop);
+                        console.log(indig_pop);
+                        console.log(coords);                //stored as strings temporarily.
+
+                        $('#map').vectorMap( {
+                            map: 'us-il-chicago_mill_en',
+                            markers: coords,
+                            backgroundColor: '#ffffff',
+                            series: {
+                                markers: [{
+                                    attribute: 'fill',
+                                    scale: ['#980002'],
+                                    values: coords
+                                    }],
+                                regions: [{
+                                    scale:  ['#DEEBF7', '#08519C'],
+                                    attribute: 'fill',
+                                    values: black_pop,
+                                    min: jvm.min(black_pop),
+                                    max: jvm.max(black_pop)
+                                }]
+                                }});
+                    });
+                });
+            }
         </script> 
     </body>
 </html>
