@@ -7,24 +7,24 @@
         <script src="js/jquery.jvectormap.min.js"></script>
         <script src="js/jquery-jvectormap-us-il-chicago-mill-en.js"></script>
     </head>
-    <body onload="loadJson();">
+    <body onload="start();">
         <div id="map" style="width: 800px; height: 675px; margin-left: auto; margin-right: auto;"></div>
         <script type="text/javascript" charset="utf-8">
-            function loadJson()
+            function start()
             {
                 $(function()
                 {
                     $.getJSON('data/chiraq.json', function(data) {
                         console.log(data);
-                        var asian_pop = [];
-                        var black_pop = [];
-                        var latino_pop = [];
-                        var multi_pop = [];
-                        var indig_pop = [];
-                        var other_pop = [];
-                        var white_pop = [];
+                        var asian_pop = [],
+                            black_pop = [],
+                            latino_pop = [],
+                            multi_pop = [],
+                            indig_pop = [],
+                            other_pop = [],
+                            white_pop = [];
                         
-                        var coords = [];        // Array of coordinate pairs (pair stored as array) of homicides
+                        var coords = [];      
                         
                         for (var i = 0; i < data.pop_stats.length; i++)
                         {
@@ -46,15 +46,20 @@
                             
                         }
                         
-                        console.log(black_pop);
-                        console.log(asian_pop);
-                        console.log(latino_pop);
-                        console.log(other_pop);
-                        console.log(white_pop);
-                        console.log(indig_pop);
-                        console.log(coords);                //stored as strings temporarily.
-
-                        $('#map').vectorMap( {
+                        getPopbyID = function(btn) {
+                            
+                            var pop = btn === "A" ? asian_pop : (btn === "B" ? black_pop :
+                                                                (btn === "L" ? latino_pop :
+                                                                (btn === "M" ? multi_pop :
+                                                                (btn === "N" ? indig_pop :
+                                                                (btn === "O" ? other_pop :
+                                                                (btn === "W" ? white_pop :
+                                                                 black_pop))))));
+                            return pop;
+                        }
+                            
+        
+                       $('#map').vectorMap({
                             map: 'us-il-chicago_mill_en',
                             markers: coords,
                             backgroundColor: '#ffffff',
@@ -70,11 +75,76 @@
                                     values: black_pop,
                                     min: jvm.min(black_pop),
                                     max: jvm.max(black_pop)
-                                }]
-                                }});
+                                 }]
+                                },
+                                onMarkerTipShow: function(event, label, index) {
+                                label.html(
+                                        '<b>Homicide</b></br>'+
+                                        '<b>Date: </b>'+data.homicides[index].Date+'</br>' +
+                                        '<b>Arrest: </b>'+data.homicides[index].Arrest+'</br>'
+                                    );
+                                 },
+                                onRegionTipShow: function(event, label, code) {
+                                    var index = parseInt(code);
+                                    label.html(
+                                          '<b>'+label.html()+'</b></br>'+
+                                          '<b>Asian: </b>'+data.pop_stats[index].AS+'%</br>'+
+                                          '<b>Black: </b>'+data.pop_stats[index].BLK+'%</br>'+
+                                          '<b>Latino: </b>'+data.pop_stats[index].LAT+'%</br>'+
+                                          '<b>Native American: </b>'+data.pop_stats[index].NA+'%</br>'+
+                                          '<b>White: </b>'+data.pop_stats[index].WHT+'%</br>'+
+                                          '<b>Bi/Multi-racial: </b>'+data.pop_stats[index].MUL+'%</br>' 
+                                     );
+                                }
+                        });
+                        $('#as-btn').click(function(e) {
+                                e.preventDefault();
+                                var mapObject = $('#map').vectorMap('get', 'mapObject');
+                                mapObject.series.regions[0].setValues(getPopbyID("A"));
+                                });
+                        $('#blk-btn').click(function(e) {
+                                e.preventDefault();
+                                var mapObject = $('#map').vectorMap('get', 'mapObject');
+                                mapObject.series.regions[0].setValues(getPopbyID("B"));
+                                });
+                        $('#lat-btn').click(function(e) {
+                                e.preventDefault();
+                                var mapObject = $('#map').vectorMap('get', 'mapObject');
+                                mapObject.series.regions[0].setValues(getPopbyID("L"));
+                                });
+                        $('#na-btn').click(function(e) {
+                                e.preventDefault();
+                                var mapObject = $('#map').vectorMap('get', 'mapObject');
+                                mapObject.series.regions[0].setValues(getPopbyID("N"));
+                                });
+                        $('#wht-btn').click(function(e) {
+                                e.preventDefault();
+                                var mapObject = $('#map').vectorMap('get', 'mapObject');
+                                mapObject.series.regions[0].setValues(getPopbyID("W"));
+                                });
+                        $('#oth-btn').click(function(e) {
+                                e.preventDefault();
+                                var mapObject = $('#map').vectorMap('get', 'mapObject');
+                                mapObject.series.regions[0].setValues(getPopbyID("O"));
+                                });
+                        $('#mul-btn').click(function(e) {
+                                e.preventDefault();
+                                var mapObject = $('#map').vectorMap('get', 'mapObject');
+                                mapObject.series.regions[0].setValues(getPopbyID("M"));
+                                });
                     });
                 });
             }
-        </script> 
-    </body>
+        </script>
+        <div class="buttons-container">
+            <ul id="buttons-list">
+            <li> <button class="buttons" id="as-btn" type="button" >Asian</button> </li>
+            <li> <button class="buttons" id="blk-btn" type="button">Black</button> </li>
+            <li> <button class="buttons" id="lat-btn" type="button">Latino</button> </li>
+            <li> <button class="buttons" id="na-btn" type="button">Native American</button> </li>
+            <li> <button class="buttons" id="wht-btn" type="button">White</button> </li>
+            <li> <button class="buttons" id="mul-btn" type="button">Bi/Multi-racial</button> </li>
+            </ul>
+        </div>
+        </body>
 </html>
