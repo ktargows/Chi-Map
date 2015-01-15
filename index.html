@@ -96,39 +96,55 @@
                                           '<b>Bi/Multi-racial: </b>'+data.pop_stats[index].MUL+'%</br>' 
                                      );
                                 }
-                        });
-                        $('#as-btn').click(function(e) {
-                                e.preventDefault();
+                       });
+                       $('#blk-btn').toggleClass('active');
+    
+                       $('#as-btn').click(function(e) {
+                               e.preventDefault();
+                               $('.active').toggleClass('active');
+                               $(this).toggleClass("active");
                                 var mapObject = $('#map').vectorMap('get', 'mapObject');
                                 mapObject.series.regions[0].setValues(getPopbyID("A"));
                                 });
                         $('#blk-btn').click(function(e) {
                                 e.preventDefault();
+                                $('.active').toggleClass('active');
+                                $(this).toggleClass("active");
                                 var mapObject = $('#map').vectorMap('get', 'mapObject');
                                 mapObject.series.regions[0].setValues(getPopbyID("B"));
                                 });
                         $('#lat-btn').click(function(e) {
                                 e.preventDefault();
+                                $('.active').toggleClass('active');
+                                $(this).toggleClass("active");
                                 var mapObject = $('#map').vectorMap('get', 'mapObject');
                                 mapObject.series.regions[0].setValues(getPopbyID("L"));
                                 });
                         $('#na-btn').click(function(e) {
                                 e.preventDefault();
+                                $('.active').toggleClass('active');
+                                $(this).toggleClass("active");
                                 var mapObject = $('#map').vectorMap('get', 'mapObject');
                                 mapObject.series.regions[0].setValues(getPopbyID("N"));
                                 });
                         $('#wht-btn').click(function(e) {
                                 e.preventDefault();
+                                $('.active').toggleClass('active');
+                                $(this).toggleClass("active");
                                 var mapObject = $('#map').vectorMap('get', 'mapObject');
                                 mapObject.series.regions[0].setValues(getPopbyID("W"));
                                 });
                         $('#oth-btn').click(function(e) {
                                 e.preventDefault();
+                                $('.active').toggleClass('active');
+                                $(this).toggleClass("active");
                                 var mapObject = $('#map').vectorMap('get', 'mapObject');
                                 mapObject.series.regions[0].setValues(getPopbyID("O"));
                                 });
                         $('#mul-btn').click(function(e) {
                                 e.preventDefault();
+                                $('.active').toggleClass('active');
+                                $(this).toggleClass("active");
                                 var mapObject = $('#map').vectorMap('get', 'mapObject');
                                 mapObject.series.regions[0].setValues(getPopbyID("M"));
                                 });

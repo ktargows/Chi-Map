@@ -19,11 +19,12 @@
     text-rendering: optimizeLegibility;
 }
 
-.buttons:hover {
+.buttons:hover, .buttons:active, .active {
     color:#08519C;
     text-decoration: underline;
     font-weight: bolder;
 }
+
 #buttons-list {
     list-style-type: none;
 }
